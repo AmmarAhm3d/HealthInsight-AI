@@ -1,0 +1,17 @@
+{
+  "genomic_analysis": {
+    "total_sequences": 20,
+    "avg_length": 134.95,
+    "min_length": 60,
+    "max_length": 200,
+    "avg_gc_content": 49.18508142709144,
+    "min_gc_content": 39.53488372093023,
+    "max_gc_content": 55.23255813953488,
+    "sequences_analyzed": 20
+  },
+  "interpretation": {
+    "gc_content_significance": "GC content can indicate genomic regions and gene density",
+    "sequence_diversity": "Analyzed 20 sequences with varying lengths",
+    "medical_relevance": "Sequence analysis is crucial for identifying genetic variants associated with diseases"
+  }
+}

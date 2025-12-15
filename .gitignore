@@ -35,6 +35,10 @@ models/*.h5
 models/*.pkl
 *.pkl
 
+# Large result files
+results/*.csv
+results/patient_data.csv
+
 # IDE
 .vscode/
 .idea/

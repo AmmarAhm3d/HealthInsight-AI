@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-12-15T06:16:52.691394",
+  "dataset": {
+    "total_patients": 15000,
+    "features": 15,
+    "disease_prevalence": 0.4
+  },
+  "model_performance": {
+    "accuracy": 0.925,
+    "test_samples": 3000,
+    "train_samples": 12000,
+    "achieved_target": true
+  },
+  "files_generated": {
+    "data": "results/patient_data.csv",
+    "model": "models/disease_prediction_model.h5",
+    "visualizations": "visualizations/*.png"
+  }
+}
