@@ -54,3 +54,4 @@ results/*.png
 results/*.html
 visualizations/*.png
 visualizations/*.html
+__pycache__/
