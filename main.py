@@ -28,7 +28,7 @@ class HealthInsightAI:
         os.makedirs(output_dir, exist_ok=True)
         
         # Initialize components
-        self.data_generator = MedicalDataGenerator(n_samples=10000)
+        self.data_generator = MedicalDataGenerator(n_samples=15000)
         self.model = DiseasePredictionModel()
         self.nlp_analyzer = MedicalNLPAnalyzer()
         self.bio_analyzer = BiologicalDataAnalyzer()
@@ -70,7 +70,7 @@ class HealthInsightAI:
         y = self.patient_data['disease']
         
         print(f"Training with {len(X)} samples and {len(X.columns)} features")
-        print("Model architecture: Deep Neural Network with 4 hidden layers")
+        print("Model architecture: Deep Neural Network with 5 hidden layers (256-128-64-32-16)")
         print("Training in progress...")
         
         # Train model

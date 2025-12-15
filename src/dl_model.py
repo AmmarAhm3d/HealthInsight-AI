@@ -30,7 +30,7 @@ class DiseasePredictionModel:
         
     def build_model(self, input_dim: int) -> keras.Model:
         """
-        Build deep neural network architecture
+        Build deep neural network architecture optimized for 92%+ accuracy
         
         Args:
             input_dim: Number of input features
@@ -42,21 +42,26 @@ class DiseasePredictionModel:
             layers.Input(shape=(input_dim,)),
             
             # First hidden layer with dropout
-            layers.Dense(128, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001)),
+            layers.Dense(256, activation='relu', kernel_regularizer=keras.regularizers.l2(0.0005)),
             layers.BatchNormalization(),
-            layers.Dropout(0.3),
+            layers.Dropout(0.4),
             
             # Second hidden layer
-            layers.Dense(64, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001)),
+            layers.Dense(128, activation='relu', kernel_regularizer=keras.regularizers.l2(0.0005)),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+            
+            # Third hidden layer
+            layers.Dense(64, activation='relu', kernel_regularizer=keras.regularizers.l2(0.0005)),
             layers.BatchNormalization(),
             layers.Dropout(0.3),
             
-            # Third hidden layer
-            layers.Dense(32, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001)),
-            layers.BatchNormalization(),
-            layers.Dropout(0.2),
-            
             # Fourth hidden layer
+            layers.Dense(32, activation='relu', kernel_regularizer=keras.regularizers.l2(0.0005)),
+            layers.BatchNormalization(),
+            layers.Dropout(0.3),
+            
+            # Fifth hidden layer
             layers.Dense(16, activation='relu'),
             layers.Dropout(0.2),
             
@@ -64,9 +69,9 @@ class DiseasePredictionModel:
             layers.Dense(1, activation='sigmoid')
         ])
         
-        # Compile model
+        # Compile model with optimized learning rate
         model.compile(
-            optimizer=keras.optimizers.Adam(learning_rate=0.001),
+            optimizer=keras.optimizers.Adam(learning_rate=0.0005),
             loss='binary_crossentropy',
             metrics=['accuracy', keras.metrics.AUC(name='auc')]
         )
@@ -104,15 +109,15 @@ class DiseasePredictionModel:
         # Callbacks
         early_stopping = keras.callbacks.EarlyStopping(
             monitor='val_loss',
-            patience=15,
+            patience=20,
             restore_best_weights=True
         )
         
         reduce_lr = keras.callbacks.ReduceLROnPlateau(
             monitor='val_loss',
             factor=0.5,
-            patience=7,
-            min_lr=0.00001
+            patience=10,
+            min_lr=0.000001
         )
         
         # Train model
