@@ -29,14 +29,19 @@ class HealthcareVisualizer:
             df: Patient data DataFrame
             save: Whether to save the plot
         """
-        fig, axes = plt.subplots(3, 3, figsize=(15, 12))
-        fig.suptitle('Distribution of Medical Features', fontsize=16, fontweight='bold')
-        
         features = [
             'age', 'blood_pressure_systolic', 'blood_pressure_diastolic',
             'heart_rate', 'cholesterol', 'glucose',
             'bmi', 'exercise_hours', 'body_temperature'
         ]
+        
+        # Validate required columns exist
+        missing_features = [f for f in features if f not in df.columns]
+        if missing_features:
+            raise ValueError(f"DataFrame is missing required columns: {missing_features}")
+        
+        fig, axes = plt.subplots(3, 3, figsize=(15, 12))
+        fig.suptitle('Distribution of Medical Features', fontsize=16, fontweight='bold')
         
         for idx, feature in enumerate(features):
             ax = axes[idx // 3, idx % 3]
@@ -86,6 +91,10 @@ class HealthcareVisualizer:
             df: Patient data DataFrame
             save: Whether to save the plot
         """
+        # Validate required column exists
+        if 'disease' not in df.columns:
+            raise ValueError("DataFrame is missing required column: 'disease'")
+        
         fig, axes = plt.subplots(1, 2, figsize=(14, 6))
         
         # Count plot
@@ -226,6 +235,12 @@ class HealthcareVisualizer:
             save: Whether to save the plot
         """
         features = ['age', 'blood_pressure_systolic', 'cholesterol', 'glucose', 'bmi', 'heart_rate']
+        
+        # Validate required columns exist
+        required_cols = features + ['disease']
+        missing_cols = [col for col in required_cols if col not in df.columns]
+        if missing_cols:
+            raise ValueError(f"DataFrame is missing required columns: {missing_cols}")
         
         fig, axes = plt.subplots(2, 3, figsize=(15, 10))
         fig.suptitle('Feature Distribution by Disease Status', fontsize=16, fontweight='bold')

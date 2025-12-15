@@ -65,6 +65,10 @@ class HealthInsightAI:
         print("STEP 2: Training Deep Learning Model")
         print("="*60)
         
+        # Validate that patient data has been generated
+        if self.patient_data is None:
+            raise ValueError("Patient data must be generated before training. Call generate_data() first.")
+        
         # Prepare features and target
         X = self.patient_data.drop('disease', axis=1)
         y = self.patient_data['disease']
