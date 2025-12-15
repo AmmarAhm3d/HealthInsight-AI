@@ -5,7 +5,6 @@ Synthetic medical dataset generator for disease prediction
 
 import numpy as np
 import pandas as pd
-from typing import Tuple
 
 
 class MedicalDataGenerator:
@@ -14,7 +13,7 @@ class MedicalDataGenerator:
     def __init__(self, n_samples: int = 15000, random_state: int = 42):
         self.n_samples = n_samples
         self.random_state = random_state
-        np.random.seed(random_state)
+        self.rng = np.random.default_rng(random_state)
         
     def generate_patient_data(self) -> pd.DataFrame:
         """
@@ -24,29 +23,29 @@ class MedicalDataGenerator:
             DataFrame with patient features and disease labels
         """
         # Patient demographics
-        age = np.random.normal(50, 15, self.n_samples).clip(18, 95)
-        gender = np.random.choice([0, 1], self.n_samples)  # 0: Female, 1: Male
+        age = self.rng.normal(50, 15, self.n_samples).clip(18, 95)
+        gender = self.rng.choice([0, 1], self.n_samples)  # 0: Female, 1: Male
         
         # Vital signs
-        blood_pressure_systolic = np.random.normal(130, 20, self.n_samples).clip(90, 200)
-        blood_pressure_diastolic = np.random.normal(85, 15, self.n_samples).clip(60, 120)
-        heart_rate = np.random.normal(75, 12, self.n_samples).clip(50, 120)
-        body_temperature = np.random.normal(98.6, 1.2, self.n_samples).clip(96, 104)
+        blood_pressure_systolic = self.rng.normal(130, 20, self.n_samples).clip(90, 200)
+        blood_pressure_diastolic = self.rng.normal(85, 15, self.n_samples).clip(60, 120)
+        heart_rate = self.rng.normal(75, 12, self.n_samples).clip(50, 120)
+        body_temperature = self.rng.normal(98.6, 1.2, self.n_samples).clip(96, 104)
         
         # Lab results
-        cholesterol = np.random.normal(200, 40, self.n_samples).clip(120, 350)
-        glucose = np.random.normal(100, 25, self.n_samples).clip(60, 250)
-        bmi = np.random.normal(26, 5, self.n_samples).clip(15, 45)
+        cholesterol = self.rng.normal(200, 40, self.n_samples).clip(120, 350)
+        glucose = self.rng.normal(100, 25, self.n_samples).clip(60, 250)
+        bmi = self.rng.normal(26, 5, self.n_samples).clip(15, 45)
         
         # Lifestyle factors
-        smoking = np.random.choice([0, 1], self.n_samples, p=[0.7, 0.3])
-        exercise_hours = np.random.exponential(2, self.n_samples).clip(0, 15)
-        alcohol_consumption = np.random.choice([0, 1, 2, 3], self.n_samples, p=[0.3, 0.4, 0.2, 0.1])
+        smoking = self.rng.choice([0, 1], self.n_samples, p=[0.7, 0.3])
+        exercise_hours = self.rng.exponential(2, self.n_samples).clip(0, 15)
+        alcohol_consumption = self.rng.choice([0, 1, 2, 3], self.n_samples, p=[0.3, 0.4, 0.2, 0.1])
         
         # Medical history
-        family_history = np.random.choice([0, 1], self.n_samples, p=[0.6, 0.4])
-        previous_heart_issues = np.random.choice([0, 1], self.n_samples, p=[0.8, 0.2])
-        diabetes_history = np.random.choice([0, 1], self.n_samples, p=[0.75, 0.25])
+        family_history = self.rng.choice([0, 1], self.n_samples, p=[0.6, 0.4])
+        previous_heart_issues = self.rng.choice([0, 1], self.n_samples, p=[0.8, 0.2])
+        diabetes_history = self.rng.choice([0, 1], self.n_samples, p=[0.75, 0.25])
         
         # Disease prediction (target variable)
         # Enhanced logic with stronger signals for 92%+ accuracy
@@ -62,7 +61,7 @@ class MedicalDataGenerator:
             2.5 * family_history +
             4.0 * previous_heart_issues +
             3.0 * diabetes_history +
-            np.random.normal(0, 0.8, self.n_samples)
+            self.rng.normal(0, 0.8, self.n_samples)
         )
         
         # Convert risk score to binary disease label
@@ -109,8 +108,8 @@ class MedicalDataGenerator:
         
         notes = []
         for _ in range(n_notes):
-            symptom = np.random.choice(symptoms, np.random.randint(1, 4), replace=False)
-            condition = np.random.choice(conditions)
+            symptom = self.rng.choice(symptoms, self.rng.integers(1, 4), replace=False)
+            condition = self.rng.choice(conditions)
             
             note = f"Patient presents with {', '.join(symptom)}. "
             note += f"Preliminary diagnosis suggests {condition}. "

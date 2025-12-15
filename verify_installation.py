@@ -44,7 +44,6 @@ def test_modules():
 def test_functionality():
     """Test basic functionality of each component"""
     print("\nTesting component functionality...")
-    sys.path.insert(0, 'src')
     
     from data_generator import MedicalDataGenerator
     from nlp_analyzer import MedicalNLPAnalyzer

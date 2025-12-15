@@ -189,6 +189,9 @@ class DiseasePredictionModel:
     def save_model(self, model_path: str = 'models/disease_prediction_model.h5',
                    scaler_path: str = 'models/scaler.pkl'):
         """Save trained model and scaler"""
+        if self.model is None:
+            raise ValueError("Model must be trained before saving. Call train() first.")
+        
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
         self.model.save(model_path)
         
@@ -197,8 +200,20 @@ class DiseasePredictionModel:
     
     def load_model(self, model_path: str = 'models/disease_prediction_model.h5',
                    scaler_path: str = 'models/scaler.pkl'):
-        """Load trained model and scaler"""
-        self.model = keras.models.load_model(model_path)
+        """Load trained model and scaler
         
-        with open(scaler_path, 'rb') as f:
-            self.scaler = pickle.load(f)
+        Note: Loading pickle files from untrusted sources can be dangerous.
+        Only load models from trusted sources.
+        """
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"Model file not found: {model_path}")
+        if not os.path.exists(scaler_path):
+            raise FileNotFoundError(f"Scaler file not found: {scaler_path}")
+        
+        try:
+            self.model = keras.models.load_model(model_path)
+            
+            with open(scaler_path, 'rb') as f:
+                self.scaler = pickle.load(f)
+        except Exception as e:
+            raise RuntimeError(f"Error loading model or scaler: {str(e)}")

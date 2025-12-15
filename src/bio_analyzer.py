@@ -4,17 +4,16 @@ Demonstrates working with biological sequences and data
 """
 
 from Bio.Seq import Seq
-from Bio.SeqUtils import molecular_weight, gc_fraction
-from Bio import SeqIO
-from io import StringIO
-import random
+from Bio.SeqUtils import gc_fraction
+import numpy as np
 
 
 class BiologicalDataAnalyzer:
     """Analyze biological sequences using Biopython"""
     
-    def __init__(self):
+    def __init__(self, random_state: int = 42):
         self.sequences = []
+        self.rng = np.random.default_rng(random_state)
         
     def generate_sample_sequences(self, n_sequences: int = 10) -> list:
         """
@@ -30,8 +29,8 @@ class BiologicalDataAnalyzer:
         sequences = []
         
         for i in range(n_sequences):
-            length = random.randint(50, 200)
-            seq_str = ''.join(random.choices(nucleotides, k=length))
+            length = self.rng.integers(50, 201)
+            seq_str = ''.join(self.rng.choice(nucleotides, size=length))
             seq = Seq(seq_str)
             sequences.append(seq)
         
@@ -71,7 +70,7 @@ class BiologicalDataAnalyzer:
         try:
             protein = sequence.translate()
             analysis['protein_sequence'] = str(protein)[:30] + '...'
-        except:
+        except Exception:
             analysis['protein_sequence'] = 'N/A'
         
         return analysis
